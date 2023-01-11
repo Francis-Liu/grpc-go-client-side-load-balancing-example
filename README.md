@@ -8,15 +8,7 @@ In this example I implemented a `grpc.Resolver` which only returns fixed servers
 
 ## Prequirements
 
-- [protoc](https://github.com/google/protobuf)
-- [protoc-gen-go](https://github.com/golang/protobuf/tree/master/protoc-gen-go)
-  - `$ go get -u github.com/golang/protobuf/protoc-gen-go`
-
-## Build
-
-```
-$ make
-```
+- Follow the instructions in https://grpc.io/docs/languages/go/quickstart/#prerequisites
 
 ## Run
 
