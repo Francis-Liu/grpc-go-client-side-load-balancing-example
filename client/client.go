@@ -6,7 +6,6 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"sync"
 	"time"
 
 	"github.com/Francis-Liu/grpc-go-client-side-load-balancing-example/echo"
@@ -70,13 +69,14 @@ func main() {
 
 	c := echo.NewEchoServiceClient(conn)
 
-	var wg sync.WaitGroup
+	// var wg sync.WaitGroup
 	for i := 0; i < callTimes; i++ {
-		wg.Add(1)
-		go func(i int) {
-			callEcho(c, fmt.Sprintf("hello %d", i))
-			wg.Done()
-		}(i)
+		// 	wg.Add(1)
+		// 	go func(i int) {
+		callEcho(c, fmt.Sprintf("hello %d", i))
+		time.Sleep(2 * time.Second)
+		// 		wg.Done()
+		// 	}(i)
 	}
-	wg.Wait()
+	// wg.Wait()
 }

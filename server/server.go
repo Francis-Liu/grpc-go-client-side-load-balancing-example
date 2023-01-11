@@ -12,10 +12,12 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-var hostPort string
+var (
+	grpcPort   = flag.Int("grpcport", 50051, "Server listening port")
+	serverName = flag.String("servername", "server1", "Server host name")
+)
 
 func init() {
-	flag.StringVar(&hostPort, "hostport", "0.0.0.0:5000", "Server listening port")
 	flag.Parse()
 }
 
@@ -23,11 +25,11 @@ type server struct {
 }
 
 func (s *server) Echo(ctx context.Context, in *echo.EchoRequest) (*echo.EchoResponse, error) {
-	return &echo.EchoResponse{Message: in.GetMessage()}, nil
+	return &echo.EchoResponse{Message: "Hello " + in.GetMessage() + " from " + *serverName}, nil
 }
 
-func serve(hostPort string) {
-	lis, err := net.Listen("tcp", hostPort)
+func serve(port int) {
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
@@ -41,6 +43,6 @@ func serve(hostPort string) {
 }
 
 func main() {
-	fmt.Printf("Starting server on %s ...\n", hostPort)
-	serve(hostPort)
+	fmt.Printf("Starting server on %d ...\n", *grpcPort)
+	serve(*grpcPort)
 }

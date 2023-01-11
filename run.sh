@@ -1,15 +1,31 @@
 #!/bin/bash
-trap 'kill $(jobs -p)' EXIT
 
-./server/server -hostport 0.0.0.0:5000 &
-./server/server -hostport 0.0.0.0:5001 &
-./server/server -hostport 0.0.0.0:5002 &
-./server/server -hostport 0.0.0.0:5003 &
+set -o xtrace
+set -o nounset
+set -o errexit
+set -o pipefail
+
+trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM EXIT
+
+RUN_SERVER=(
+    "go"
+    "run"
+    "./server"
+)
+
+RUN_CLIENT=(
+    "go"
+    "run"
+    "./client"
+)
+
+${RUN_SERVER[@]} --grpcport 5001 --servername server1 &
+${RUN_SERVER[@]} --grpcport 5002 --servername server2 &
+${RUN_SERVER[@]} --grpcport 5003 --servername server3 &
 
 sleep 3
 
-time ./client/client -n 100 \
-    -server localhost:5000 \
+time ${RUN_CLIENT[@]} -n 100 \
     -server localhost:5001 \
     -server localhost:5002 \
-    -server localhost:5003 \
+    -server localhost:5003

@@ -8,27 +8,16 @@ In this example I implemented a `grpc.Resolver` which only returns fixed servers
 
 ## Prequirements
 
-- Follow the instructions in https://grpc.io/docs/languages/go/quickstart/#prerequisites
+* Follow the instructions in https://grpc.io/docs/languages/go/quickstart/#prerequisites
+* Install debug tools
+  * Evans CLI
+    * `go install github.com/ktr0731/evans@latest`
+  * grpcurl
+    * `curl -L https://github.com/fullstorydev/grpcurl/releases/download/v1.8.1/grpcurl_1.8.1_linux_x86_64.tar.gz | tar -xz`
 
 ## Run
 
 ```console
-# Run 4 servers
-$ ./server/server -hostport 0.0.0.0:5000 &
-$ ./server/server -hostport 0.0.0.0:5001 &
-$ ./server/server -hostport 0.0.0.0:5002 &
-$ ./server/server -hostport 0.0.0.0:5003 &
-
-$ sleep 3 # Wait for server to start up
-
-# Do gRPC method calls 10000 times
-$ time ./client/client -n 10000 \
-    -server localhost:5000 \
-    -server localhost:5001 \
-    -server localhost:5002 \
-    -server localhost:5003 \
- 
-# or 
 $ ./run.sh
 ```
 
